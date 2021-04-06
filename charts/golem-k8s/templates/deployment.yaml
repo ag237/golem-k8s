@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "golem-k8s.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "golem-k8s.selectorLabels" . | nindent 6 }}
@@ -33,20 +31,45 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: dev-kvm
+              mountPath: /dev/kvm
+            - name: globals-json
+              mountPath: /root/.local/share/ya-provider/globals.json
+            - name: hardware-json
+              mountPath: /root/.local/share/ya-provider/hardware.json
+            - name: presets-json
+              mountPath: /root/.local/share/ya-provider/presets.json
+            {{- if .Values.additionalVolumeMounts }}
+            {{- toYaml .Values.additionalVolumeMounts | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: dev-kvm
+          hostPath:
+            path: /dev/kvm
+        - name: globals-json
+          configMap:
+            name: {{ template "golem-k8s.fullname" . }}
+            items:
+              - key: globals.json
+                path: globals.json
+        - name: hardware-json
+          configMap:
+            name: {{ template "golem-k8s.fullname" . }}
+            items:
+              - key: hardware.json
+                path: hardware.json
+        - name: presets-json
+          configMap:
+            name: {{ template "golem-k8s.fullname" . }}
+            items:
+              - key: presets.json
+                path: presets.json
+        {{- if .Values.additionalVolumes }}
+        {{- toYaml .Values.additionalVolumes | nindent 10 }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
