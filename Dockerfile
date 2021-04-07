@@ -41,10 +41,7 @@ RUN apt-get update -q \
 COPY --from=installer ${YA_DIR_PLUGINS} ${YA_DIR_PLUGINS}
 COPY --from=installer ${YA_DIR_BIN_TMP} ${YA_DIR_BIN}
 
-ENTRYPOINT ["sleep"]
-
-CMD ["100000"]
-#CMD ["golemsp", "run"]
+CMD ["golemsp", "run"]
 # HEALTHCHECK \
 #     --interval=10m \
 #     --timeout=10s \

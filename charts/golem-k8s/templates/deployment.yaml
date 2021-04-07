@@ -38,10 +38,13 @@ spec:
               mountPath: /dev/kvm
             - name: globals-json
               mountPath: /root/.local/share/ya-provider/globals.json
+              subPath: globals.json
             - name: hardware-json
               mountPath: /root/.local/share/ya-provider/hardware.json
+              subPath: hardware.json
             - name: presets-json
               mountPath: /root/.local/share/ya-provider/presets.json
+              subPath: presets.json
             {{- if .Values.additionalVolumeMounts }}
             {{- toYaml .Values.additionalVolumeMounts | nindent 12 }}
             {{- end }}
