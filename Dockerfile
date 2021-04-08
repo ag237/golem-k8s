@@ -41,6 +41,11 @@ RUN apt-get update -q \
 COPY --from=installer ${YA_DIR_PLUGINS} ${YA_DIR_PLUGINS}
 COPY --from=installer ${YA_DIR_BIN_TMP} ${YA_DIR_BIN}
 
+ENV YA_CORE_LOG=debug
+ENV ya_runtime_api=info
+ENV ya_runtime_vm=info
+ENV ya_payment=trace
+
 CMD ["golemsp", "run"]
 # HEALTHCHECK \
 #     --interval=10m \
