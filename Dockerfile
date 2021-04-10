@@ -47,7 +47,8 @@ ENV ya_runtime_vm=info
 ENV ya_payment=trace
 ENV YAGNA_METRICS_URL=http://metrics.golem.network.:9091
 
-CMD ["golemsp", "run"]
+#CMD ["golemsp", "run"]
+CMD ["sleep", "500000"]
 # HEALTHCHECK \
 #     --interval=10m \
 #     --timeout=10s \
