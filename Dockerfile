@@ -45,6 +45,7 @@ ENV YA_CORE_LOG=debug
 ENV ya_runtime_api=info
 ENV ya_runtime_vm=info
 ENV ya_payment=trace
+ENV YAGNA_METRICS_URL=http://metrics.golem.network.:9091
 
 CMD ["golemsp", "run"]
 # HEALTHCHECK \
